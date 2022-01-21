@@ -1,4 +1,9 @@
 # ChoreChamps
+
 GQL Test Repo
 
-Hasura/graphql-request/graphql-codegen playground
+Default typescript tabbed template, slightly reorganized.
+
+- Hasura in docker
+- graphql-request
+- graphql-codegen
