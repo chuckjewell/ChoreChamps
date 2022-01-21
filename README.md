@@ -14,3 +14,5 @@ Start the docker image: **yarn hasura:up**
 
 
 Kick off graphql-codegen: **yarn gql-generate** or **yarn gql-generate-watch**
+
+**TODO**: Add migration/initial schema and populate some data for postgres to use this from scratch.
