@@ -1,0 +1,13 @@
+overwrite: true
+schema: 'http://localhost:8080/v1/graphql'
+documents: 'src/**/*.graphql'
+generates:
+  src/generated/index.ts:
+    plugins:
+      - typescript
+      - typescript-operations
+      - typescript-react-query
+    config:
+      fetcher: graphql-request
+      omitOperationSuffix: true
+      addInfiniteQuery: true

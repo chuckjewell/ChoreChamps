@@ -1,0 +1,47 @@
+fragment userDetailsFragment on user {
+  id
+  name
+  email
+  updated_at
+  created_at
+}
+
+fragment taskDetailsFragment on task {
+  id
+  description
+  created_at
+  rating
+  title
+  updated_at
+  user
+}
+
+query UsersQuery($offset: Int! = 0, $limit: Int!) {
+  user(offset: 0, limit: 10) {
+    ...userDetailsFragment
+  }
+}
+
+query UserDetailsQuery($id: uuid!) {
+  user(where: { id: { _eq: $id } }) {
+    ...userDetailsFragment
+    tasks {
+      ...taskDetailsFragment
+    }
+  }
+}
+
+query TasksQuery($offset: Int! = 0, $limit: Int!) {
+  task(offset: 0, limit: 10) {
+    ...taskDetailsFragment
+  }
+}
+
+query TaskDetailsQuery($id: uuid!) {
+  task(where: { id: { _eq: $id } }) {
+    ...taskDetailsFragment
+    userByUser {
+      ...userDetailsFragment
+    }
+  }
+}
