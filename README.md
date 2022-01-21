@@ -13,4 +13,4 @@ Quick functional integration with:
 Start the docker image: **yarn hasura:up**
 
 
-Kick off graphql-codegen: **gql-generate** or **gql-generate-watch**
+Kick off graphql-codegen: **yarn gql-generate** or **yarn gql-generate-watch**
