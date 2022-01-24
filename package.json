@@ -11,8 +11,8 @@
     "hasura:down": "cd hasura && docker-compose down",
     "eject": "expo eject",
     "test": "jest --watchAll",
-    "gql-generate": "graphql-codegen --config codegen.yml",
-    "gql-generate-watch": "graphql-codegen --config codegen.yml --watch",
+    "gql-generate": "graphql-codegen --config .graphqlrc.yml",
+    "gql-generate-watch": "graphql-codegen --config .graphqlrc.yml --watch",
     "clean": "expo start --clear"
   },
   "jest": {
