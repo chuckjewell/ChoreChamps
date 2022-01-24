@@ -3,6 +3,7 @@ import { Text, View } from '@app/components/Themed'
 import EditScreenInfo from '@app/components/EditScreenInfo'
 import { RootTabScreenProps } from '@app/types/types'
 import { StyleSheet } from 'react-native'
+import colors from '@app/themes/colors'
 
 export default function TabOneScreen({
   navigation,

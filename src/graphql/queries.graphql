@@ -9,9 +9,9 @@ fragment userDetailsFragment on user {
 fragment taskDetailsFragment on task {
   id
   description
-  created_at
   rating
   title
+  created_at
   updated_at
   user
 }

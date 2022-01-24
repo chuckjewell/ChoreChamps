@@ -844,7 +844,7 @@ export type Uuid_Comparison_Exp = {
 
 export type UserDetailsFragment = { __typename?: 'user', id: any, name: string, email: string, updated_at: any, created_at: any };
 
-export type TaskDetailsFragment = { __typename?: 'task', id: any, description?: string | null | undefined, created_at: any, rating: number, title: string, updated_at: any, user: any };
+export type TaskDetailsFragment = { __typename?: 'task', id: any, description?: string | null | undefined, rating: number, title: string, created_at: any, updated_at: any, user: any };
 
 export type UsersQueryVariables = Exact<{
   offset?: Scalars['Int'];
@@ -859,7 +859,7 @@ export type UserDetailsQueryVariables = Exact<{
 }>;
 
 
-export type UserDetailsQuery = { __typename?: 'query_root', user: Array<{ __typename?: 'user', id: any, name: string, email: string, updated_at: any, created_at: any, tasks: Array<{ __typename?: 'task', id: any, description?: string | null | undefined, created_at: any, rating: number, title: string, updated_at: any, user: any }> }> };
+export type UserDetailsQuery = { __typename?: 'query_root', user: Array<{ __typename?: 'user', id: any, name: string, email: string, updated_at: any, created_at: any, tasks: Array<{ __typename?: 'task', id: any, description?: string | null | undefined, rating: number, title: string, created_at: any, updated_at: any, user: any }> }> };
 
 export type TasksQueryVariables = Exact<{
   offset?: Scalars['Int'];
@@ -867,14 +867,14 @@ export type TasksQueryVariables = Exact<{
 }>;
 
 
-export type TasksQuery = { __typename?: 'query_root', task: Array<{ __typename?: 'task', id: any, description?: string | null | undefined, created_at: any, rating: number, title: string, updated_at: any, user: any }> };
+export type TasksQuery = { __typename?: 'query_root', task: Array<{ __typename?: 'task', id: any, description?: string | null | undefined, rating: number, title: string, created_at: any, updated_at: any, user: any }> };
 
 export type TaskDetailsQueryVariables = Exact<{
   id: Scalars['uuid'];
 }>;
 
 
-export type TaskDetailsQuery = { __typename?: 'query_root', task: Array<{ __typename?: 'task', id: any, description?: string | null | undefined, created_at: any, rating: number, title: string, updated_at: any, user: any, userByUser: { __typename?: 'user', id: any, name: string, email: string, updated_at: any, created_at: any } }> };
+export type TaskDetailsQuery = { __typename?: 'query_root', task: Array<{ __typename?: 'task', id: any, description?: string | null | undefined, rating: number, title: string, created_at: any, updated_at: any, user: any, userByUser: { __typename?: 'user', id: any, name: string, email: string, updated_at: any, created_at: any } }> };
 
 export const UserDetailsFragment = `
     fragment userDetailsFragment on user {
@@ -889,9 +889,9 @@ export const TaskDetailsFragment = `
     fragment taskDetailsFragment on task {
   id
   description
-  created_at
   rating
   title
+  created_at
   updated_at
   user
 }

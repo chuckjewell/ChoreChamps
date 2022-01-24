@@ -12,7 +12,7 @@ export default function TabTwoScreen() {
         lightColor='#eee'
         darkColor='rgba(255,255,255,0.1)'
       />
-      <EditScreenInfo path='/screens/TabTwoScreen.tsx' />
+      <EditScreenInfo path='@app/screens/TabTwoScreen.tsx' />
     </View>
   )
 }
