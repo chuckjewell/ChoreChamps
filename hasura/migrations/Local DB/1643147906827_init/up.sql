@@ -14,7 +14,7 @@ CREATE TABLE public.task (
     id uuid DEFAULT public.gen_random_uuid() NOT NULL,
     created_at timestamp with time zone DEFAULT now() NOT NULL,
     updated_at timestamp with time zone DEFAULT now() NOT NULL,
-    "user" uuid NOT NULL,
+    "user" uuid,
     title text NOT NULL,
     description text,
     rating integer DEFAULT 1 NOT NULL

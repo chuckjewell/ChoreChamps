@@ -9,11 +9,15 @@
     "web": "expo start --web",
     "hasura:up": "cd hasura && docker-compose up -d",
     "hasura:down": "cd hasura && docker-compose down",
+    "hasura:migrate-init": "cd hasura && hasura migrate create 'init' --from-server --database-name 'Local DB'",
+    "hasura:create-seeds": "cd hasura && rm -rf seeds && hasura seed create task_seed --from-table task --database-name 'Local DB' && hasura seed create user_seed --from-table user --database-name 'Local DB'",
+    "hasura:apply-seeds": "cd hasura && hasura seed apply --database-name 'Local DB'",
     "eject": "expo eject",
     "test": "jest --watchAll",
     "gql-generate": "graphql-codegen --config .graphqlrc.yml",
     "gql-generate-watch": "graphql-codegen --config .graphqlrc.yml --watch",
-    "clean": "expo start --clear"
+    "clean": "expo start --clear",
+    "debug": "react-devtools"
   },
   "jest": {
     "preset": "jest-expo"
@@ -54,6 +58,7 @@
     "@types/react-native": "~0.64.12",
     "jest": "^26.6.3",
     "jest-expo": "~44.0.1",
+    "react-devtools": "^4.23.0",
     "react-test-renderer": "17.0.1",
     "typescript": "~4.3.5"
   },
