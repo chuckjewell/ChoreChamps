@@ -1,18 +1,21 @@
 # ChoreChamps
 
-GQL Test Repo
+Default react-native expo typescript tabbed template, slightly reorganized and hooked into hasura with supporting libs.
 
-Default expo typescript tabbed template, slightly reorganized and hooked into hasura with supporting libs.
-
-Quick functional integration with:
 - Hasura in docker
 - graphql-request
-- graphql-codegen
+- graphql-codegen (auto-generate types, hooks and resolvers based on the hasura project) 
 
 
-Start the docker image: **yarn hasura:up**
+**Start the docker image:** yarn hasura:up
 
 
-Kick off graphql-codegen: **yarn gql-generate** or **yarn gql-generate-watch**
+**Kick off graphql-codegen:** 
+- yarn gql-generate OR
+- yarn gql-generate-watch
 
-**TODO**: Add migration/initial schema and populate some data for postgres to use this from scratch.
+
+**Hasura/postgres setup and migration scripts:**
+- yarn hasura:migrate-init
+- yarn hasura:create-seeds
+- yarn hasura:apply-seeds
