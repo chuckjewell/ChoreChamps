@@ -1,3 +1,4 @@
+import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
 import { GraphQLClient } from 'graphql-request';
 import { RequestInit } from 'graphql-request/dist/types.dom';
 import { useQuery, UseQueryOptions, useInfiniteQuery, UseInfiniteQueryOptions, QueryFunctionContext } from 'react-query';
@@ -6,6 +7,7 @@ export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
+export type RequireFields<T, K extends keyof T> = { [X in Exclude<keyof T, K>]?: T[X] } & { [P in K]-?: NonNullable<T[P]> };
 
 function fetcher<TData, TVariables>(client: GraphQLClient, query: string, variables?: TVariables, headers?: RequestInit['headers']) {
   return async (): Promise<TData> => client.request<TData, TVariables>(query, variables, headers);
@@ -875,6 +877,435 @@ export type TaskDetailsQueryVariables = Exact<{
 
 
 export type TaskDetailsQuery = { __typename?: 'query_root', task: Array<{ __typename?: 'task', id: any, description?: string | null | undefined, rating: number, title: string, created_at: any, updated_at: any, user: any, userByUser: { __typename?: 'user', id: any, name: string, email: string, updated_at: any, created_at: any } }> };
+
+
+
+export type ResolverTypeWrapper<T> = Promise<T> | T;
+
+
+export type ResolverWithResolve<TResult, TParent, TContext, TArgs> = {
+  resolve: ResolverFn<TResult, TParent, TContext, TArgs>;
+};
+export type Resolver<TResult, TParent = {}, TContext = {}, TArgs = {}> = ResolverFn<TResult, TParent, TContext, TArgs> | ResolverWithResolve<TResult, TParent, TContext, TArgs>;
+
+export type ResolverFn<TResult, TParent, TContext, TArgs> = (
+  parent: TParent,
+  args: TArgs,
+  context: TContext,
+  info: GraphQLResolveInfo
+) => Promise<TResult> | TResult;
+
+export type SubscriptionSubscribeFn<TResult, TParent, TContext, TArgs> = (
+  parent: TParent,
+  args: TArgs,
+  context: TContext,
+  info: GraphQLResolveInfo
+) => AsyncIterable<TResult> | Promise<AsyncIterable<TResult>>;
+
+export type SubscriptionResolveFn<TResult, TParent, TContext, TArgs> = (
+  parent: TParent,
+  args: TArgs,
+  context: TContext,
+  info: GraphQLResolveInfo
+) => TResult | Promise<TResult>;
+
+export interface SubscriptionSubscriberObject<TResult, TKey extends string, TParent, TContext, TArgs> {
+  subscribe: SubscriptionSubscribeFn<{ [key in TKey]: TResult }, TParent, TContext, TArgs>;
+  resolve?: SubscriptionResolveFn<TResult, { [key in TKey]: TResult }, TContext, TArgs>;
+}
+
+export interface SubscriptionResolverObject<TResult, TParent, TContext, TArgs> {
+  subscribe: SubscriptionSubscribeFn<any, TParent, TContext, TArgs>;
+  resolve: SubscriptionResolveFn<TResult, any, TContext, TArgs>;
+}
+
+export type SubscriptionObject<TResult, TKey extends string, TParent, TContext, TArgs> =
+  | SubscriptionSubscriberObject<TResult, TKey, TParent, TContext, TArgs>
+  | SubscriptionResolverObject<TResult, TParent, TContext, TArgs>;
+
+export type SubscriptionResolver<TResult, TKey extends string, TParent = {}, TContext = {}, TArgs = {}> =
+  | ((...args: any[]) => SubscriptionObject<TResult, TKey, TParent, TContext, TArgs>)
+  | SubscriptionObject<TResult, TKey, TParent, TContext, TArgs>;
+
+export type TypeResolveFn<TTypes, TParent = {}, TContext = {}> = (
+  parent: TParent,
+  context: TContext,
+  info: GraphQLResolveInfo
+) => Maybe<TTypes> | Promise<Maybe<TTypes>>;
+
+export type IsTypeOfResolverFn<T = {}, TContext = {}> = (obj: T, context: TContext, info: GraphQLResolveInfo) => boolean | Promise<boolean>;
+
+export type NextResolverFn<T> = () => Promise<T>;
+
+export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs = {}> = (
+  next: NextResolverFn<TResult>,
+  parent: TParent,
+  args: TArgs,
+  context: TContext,
+  info: GraphQLResolveInfo
+) => TResult | Promise<TResult>;
+
+/** Mapping between all available schema types and the resolvers types */
+export type ResolversTypes = {
+  Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
+  Float: ResolverTypeWrapper<Scalars['Float']>;
+  Int: ResolverTypeWrapper<Scalars['Int']>;
+  Int_comparison_exp: Int_Comparison_Exp;
+  String: ResolverTypeWrapper<Scalars['String']>;
+  String_comparison_exp: String_Comparison_Exp;
+  mutation_root: ResolverTypeWrapper<{}>;
+  order_by: Order_By;
+  query_root: ResolverTypeWrapper<{}>;
+  subscription_root: ResolverTypeWrapper<{}>;
+  task: ResolverTypeWrapper<Task>;
+  task_aggregate: ResolverTypeWrapper<Task_Aggregate>;
+  task_aggregate_fields: ResolverTypeWrapper<Task_Aggregate_Fields>;
+  task_aggregate_order_by: Task_Aggregate_Order_By;
+  task_arr_rel_insert_input: Task_Arr_Rel_Insert_Input;
+  task_avg_fields: ResolverTypeWrapper<Task_Avg_Fields>;
+  task_avg_order_by: Task_Avg_Order_By;
+  task_bool_exp: Task_Bool_Exp;
+  task_constraint: Task_Constraint;
+  task_inc_input: Task_Inc_Input;
+  task_insert_input: Task_Insert_Input;
+  task_max_fields: ResolverTypeWrapper<Task_Max_Fields>;
+  task_max_order_by: Task_Max_Order_By;
+  task_min_fields: ResolverTypeWrapper<Task_Min_Fields>;
+  task_min_order_by: Task_Min_Order_By;
+  task_mutation_response: ResolverTypeWrapper<Task_Mutation_Response>;
+  task_on_conflict: Task_On_Conflict;
+  task_order_by: Task_Order_By;
+  task_pk_columns_input: Task_Pk_Columns_Input;
+  task_select_column: Task_Select_Column;
+  task_set_input: Task_Set_Input;
+  task_stddev_fields: ResolverTypeWrapper<Task_Stddev_Fields>;
+  task_stddev_order_by: Task_Stddev_Order_By;
+  task_stddev_pop_fields: ResolverTypeWrapper<Task_Stddev_Pop_Fields>;
+  task_stddev_pop_order_by: Task_Stddev_Pop_Order_By;
+  task_stddev_samp_fields: ResolverTypeWrapper<Task_Stddev_Samp_Fields>;
+  task_stddev_samp_order_by: Task_Stddev_Samp_Order_By;
+  task_sum_fields: ResolverTypeWrapper<Task_Sum_Fields>;
+  task_sum_order_by: Task_Sum_Order_By;
+  task_update_column: Task_Update_Column;
+  task_var_pop_fields: ResolverTypeWrapper<Task_Var_Pop_Fields>;
+  task_var_pop_order_by: Task_Var_Pop_Order_By;
+  task_var_samp_fields: ResolverTypeWrapper<Task_Var_Samp_Fields>;
+  task_var_samp_order_by: Task_Var_Samp_Order_By;
+  task_variance_fields: ResolverTypeWrapper<Task_Variance_Fields>;
+  task_variance_order_by: Task_Variance_Order_By;
+  timestamptz: ResolverTypeWrapper<Scalars['timestamptz']>;
+  timestamptz_comparison_exp: Timestamptz_Comparison_Exp;
+  user: ResolverTypeWrapper<User>;
+  user_aggregate: ResolverTypeWrapper<User_Aggregate>;
+  user_aggregate_fields: ResolverTypeWrapper<User_Aggregate_Fields>;
+  user_bool_exp: User_Bool_Exp;
+  user_constraint: User_Constraint;
+  user_insert_input: User_Insert_Input;
+  user_max_fields: ResolverTypeWrapper<User_Max_Fields>;
+  user_min_fields: ResolverTypeWrapper<User_Min_Fields>;
+  user_mutation_response: ResolverTypeWrapper<User_Mutation_Response>;
+  user_obj_rel_insert_input: User_Obj_Rel_Insert_Input;
+  user_on_conflict: User_On_Conflict;
+  user_order_by: User_Order_By;
+  user_pk_columns_input: User_Pk_Columns_Input;
+  user_select_column: User_Select_Column;
+  user_set_input: User_Set_Input;
+  user_update_column: User_Update_Column;
+  uuid: ResolverTypeWrapper<Scalars['uuid']>;
+  uuid_comparison_exp: Uuid_Comparison_Exp;
+};
+
+/** Mapping between all available schema types and the resolvers parents */
+export type ResolversParentTypes = {
+  Boolean: Scalars['Boolean'];
+  Float: Scalars['Float'];
+  Int: Scalars['Int'];
+  Int_comparison_exp: Int_Comparison_Exp;
+  String: Scalars['String'];
+  String_comparison_exp: String_Comparison_Exp;
+  mutation_root: {};
+  query_root: {};
+  subscription_root: {};
+  task: Task;
+  task_aggregate: Task_Aggregate;
+  task_aggregate_fields: Task_Aggregate_Fields;
+  task_aggregate_order_by: Task_Aggregate_Order_By;
+  task_arr_rel_insert_input: Task_Arr_Rel_Insert_Input;
+  task_avg_fields: Task_Avg_Fields;
+  task_avg_order_by: Task_Avg_Order_By;
+  task_bool_exp: Task_Bool_Exp;
+  task_inc_input: Task_Inc_Input;
+  task_insert_input: Task_Insert_Input;
+  task_max_fields: Task_Max_Fields;
+  task_max_order_by: Task_Max_Order_By;
+  task_min_fields: Task_Min_Fields;
+  task_min_order_by: Task_Min_Order_By;
+  task_mutation_response: Task_Mutation_Response;
+  task_on_conflict: Task_On_Conflict;
+  task_order_by: Task_Order_By;
+  task_pk_columns_input: Task_Pk_Columns_Input;
+  task_set_input: Task_Set_Input;
+  task_stddev_fields: Task_Stddev_Fields;
+  task_stddev_order_by: Task_Stddev_Order_By;
+  task_stddev_pop_fields: Task_Stddev_Pop_Fields;
+  task_stddev_pop_order_by: Task_Stddev_Pop_Order_By;
+  task_stddev_samp_fields: Task_Stddev_Samp_Fields;
+  task_stddev_samp_order_by: Task_Stddev_Samp_Order_By;
+  task_sum_fields: Task_Sum_Fields;
+  task_sum_order_by: Task_Sum_Order_By;
+  task_var_pop_fields: Task_Var_Pop_Fields;
+  task_var_pop_order_by: Task_Var_Pop_Order_By;
+  task_var_samp_fields: Task_Var_Samp_Fields;
+  task_var_samp_order_by: Task_Var_Samp_Order_By;
+  task_variance_fields: Task_Variance_Fields;
+  task_variance_order_by: Task_Variance_Order_By;
+  timestamptz: Scalars['timestamptz'];
+  timestamptz_comparison_exp: Timestamptz_Comparison_Exp;
+  user: User;
+  user_aggregate: User_Aggregate;
+  user_aggregate_fields: User_Aggregate_Fields;
+  user_bool_exp: User_Bool_Exp;
+  user_insert_input: User_Insert_Input;
+  user_max_fields: User_Max_Fields;
+  user_min_fields: User_Min_Fields;
+  user_mutation_response: User_Mutation_Response;
+  user_obj_rel_insert_input: User_Obj_Rel_Insert_Input;
+  user_on_conflict: User_On_Conflict;
+  user_order_by: User_Order_By;
+  user_pk_columns_input: User_Pk_Columns_Input;
+  user_set_input: User_Set_Input;
+  uuid: Scalars['uuid'];
+  uuid_comparison_exp: Uuid_Comparison_Exp;
+};
+
+export type CachedDirectiveArgs = {
+  refresh?: Scalars['Boolean'];
+  ttl?: Scalars['Int'];
+};
+
+export type CachedDirectiveResolver<Result, Parent, ContextType = any, Args = CachedDirectiveArgs> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
+
+export type Mutation_RootResolvers<ContextType = any, ParentType extends ResolversParentTypes['mutation_root'] = ResolversParentTypes['mutation_root']> = {
+  delete_task?: Resolver<Maybe<ResolversTypes['task_mutation_response']>, ParentType, ContextType, RequireFields<Mutation_RootDelete_TaskArgs, 'where'>>;
+  delete_task_by_pk?: Resolver<Maybe<ResolversTypes['task']>, ParentType, ContextType, RequireFields<Mutation_RootDelete_Task_By_PkArgs, 'id'>>;
+  delete_user?: Resolver<Maybe<ResolversTypes['user_mutation_response']>, ParentType, ContextType, RequireFields<Mutation_RootDelete_UserArgs, 'where'>>;
+  delete_user_by_pk?: Resolver<Maybe<ResolversTypes['user']>, ParentType, ContextType, RequireFields<Mutation_RootDelete_User_By_PkArgs, 'id'>>;
+  insert_task?: Resolver<Maybe<ResolversTypes['task_mutation_response']>, ParentType, ContextType, RequireFields<Mutation_RootInsert_TaskArgs, 'objects'>>;
+  insert_task_one?: Resolver<Maybe<ResolversTypes['task']>, ParentType, ContextType, RequireFields<Mutation_RootInsert_Task_OneArgs, 'object'>>;
+  insert_user?: Resolver<Maybe<ResolversTypes['user_mutation_response']>, ParentType, ContextType, RequireFields<Mutation_RootInsert_UserArgs, 'objects'>>;
+  insert_user_one?: Resolver<Maybe<ResolversTypes['user']>, ParentType, ContextType, RequireFields<Mutation_RootInsert_User_OneArgs, 'object'>>;
+  update_task?: Resolver<Maybe<ResolversTypes['task_mutation_response']>, ParentType, ContextType, RequireFields<Mutation_RootUpdate_TaskArgs, 'where'>>;
+  update_task_by_pk?: Resolver<Maybe<ResolversTypes['task']>, ParentType, ContextType, RequireFields<Mutation_RootUpdate_Task_By_PkArgs, 'pk_columns'>>;
+  update_user?: Resolver<Maybe<ResolversTypes['user_mutation_response']>, ParentType, ContextType, RequireFields<Mutation_RootUpdate_UserArgs, 'where'>>;
+  update_user_by_pk?: Resolver<Maybe<ResolversTypes['user']>, ParentType, ContextType, RequireFields<Mutation_RootUpdate_User_By_PkArgs, 'pk_columns'>>;
+};
+
+export type Query_RootResolvers<ContextType = any, ParentType extends ResolversParentTypes['query_root'] = ResolversParentTypes['query_root']> = {
+  task?: Resolver<Array<ResolversTypes['task']>, ParentType, ContextType, RequireFields<Query_RootTaskArgs, never>>;
+  task_aggregate?: Resolver<ResolversTypes['task_aggregate'], ParentType, ContextType, RequireFields<Query_RootTask_AggregateArgs, never>>;
+  task_by_pk?: Resolver<Maybe<ResolversTypes['task']>, ParentType, ContextType, RequireFields<Query_RootTask_By_PkArgs, 'id'>>;
+  user?: Resolver<Array<ResolversTypes['user']>, ParentType, ContextType, RequireFields<Query_RootUserArgs, never>>;
+  user_aggregate?: Resolver<ResolversTypes['user_aggregate'], ParentType, ContextType, RequireFields<Query_RootUser_AggregateArgs, never>>;
+  user_by_pk?: Resolver<Maybe<ResolversTypes['user']>, ParentType, ContextType, RequireFields<Query_RootUser_By_PkArgs, 'id'>>;
+};
+
+export type Subscription_RootResolvers<ContextType = any, ParentType extends ResolversParentTypes['subscription_root'] = ResolversParentTypes['subscription_root']> = {
+  task?: SubscriptionResolver<Array<ResolversTypes['task']>, "task", ParentType, ContextType, RequireFields<Subscription_RootTaskArgs, never>>;
+  task_aggregate?: SubscriptionResolver<ResolversTypes['task_aggregate'], "task_aggregate", ParentType, ContextType, RequireFields<Subscription_RootTask_AggregateArgs, never>>;
+  task_by_pk?: SubscriptionResolver<Maybe<ResolversTypes['task']>, "task_by_pk", ParentType, ContextType, RequireFields<Subscription_RootTask_By_PkArgs, 'id'>>;
+  user?: SubscriptionResolver<Array<ResolversTypes['user']>, "user", ParentType, ContextType, RequireFields<Subscription_RootUserArgs, never>>;
+  user_aggregate?: SubscriptionResolver<ResolversTypes['user_aggregate'], "user_aggregate", ParentType, ContextType, RequireFields<Subscription_RootUser_AggregateArgs, never>>;
+  user_by_pk?: SubscriptionResolver<Maybe<ResolversTypes['user']>, "user_by_pk", ParentType, ContextType, RequireFields<Subscription_RootUser_By_PkArgs, 'id'>>;
+};
+
+export type TaskResolvers<ContextType = any, ParentType extends ResolversParentTypes['task'] = ResolversParentTypes['task']> = {
+  created_at?: Resolver<ResolversTypes['timestamptz'], ParentType, ContextType>;
+  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['uuid'], ParentType, ContextType>;
+  rating?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  updated_at?: Resolver<ResolversTypes['timestamptz'], ParentType, ContextType>;
+  user?: Resolver<ResolversTypes['uuid'], ParentType, ContextType>;
+  userByUser?: Resolver<ResolversTypes['user'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type Task_AggregateResolvers<ContextType = any, ParentType extends ResolversParentTypes['task_aggregate'] = ResolversParentTypes['task_aggregate']> = {
+  aggregate?: Resolver<Maybe<ResolversTypes['task_aggregate_fields']>, ParentType, ContextType>;
+  nodes?: Resolver<Array<ResolversTypes['task']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type Task_Aggregate_FieldsResolvers<ContextType = any, ParentType extends ResolversParentTypes['task_aggregate_fields'] = ResolversParentTypes['task_aggregate_fields']> = {
+  avg?: Resolver<Maybe<ResolversTypes['task_avg_fields']>, ParentType, ContextType>;
+  count?: Resolver<ResolversTypes['Int'], ParentType, ContextType, RequireFields<Task_Aggregate_FieldsCountArgs, never>>;
+  max?: Resolver<Maybe<ResolversTypes['task_max_fields']>, ParentType, ContextType>;
+  min?: Resolver<Maybe<ResolversTypes['task_min_fields']>, ParentType, ContextType>;
+  stddev?: Resolver<Maybe<ResolversTypes['task_stddev_fields']>, ParentType, ContextType>;
+  stddev_pop?: Resolver<Maybe<ResolversTypes['task_stddev_pop_fields']>, ParentType, ContextType>;
+  stddev_samp?: Resolver<Maybe<ResolversTypes['task_stddev_samp_fields']>, ParentType, ContextType>;
+  sum?: Resolver<Maybe<ResolversTypes['task_sum_fields']>, ParentType, ContextType>;
+  var_pop?: Resolver<Maybe<ResolversTypes['task_var_pop_fields']>, ParentType, ContextType>;
+  var_samp?: Resolver<Maybe<ResolversTypes['task_var_samp_fields']>, ParentType, ContextType>;
+  variance?: Resolver<Maybe<ResolversTypes['task_variance_fields']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type Task_Avg_FieldsResolvers<ContextType = any, ParentType extends ResolversParentTypes['task_avg_fields'] = ResolversParentTypes['task_avg_fields']> = {
+  rating?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type Task_Max_FieldsResolvers<ContextType = any, ParentType extends ResolversParentTypes['task_max_fields'] = ResolversParentTypes['task_max_fields']> = {
+  created_at?: Resolver<Maybe<ResolversTypes['timestamptz']>, ParentType, ContextType>;
+  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  id?: Resolver<Maybe<ResolversTypes['uuid']>, ParentType, ContextType>;
+  rating?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  title?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  updated_at?: Resolver<Maybe<ResolversTypes['timestamptz']>, ParentType, ContextType>;
+  user?: Resolver<Maybe<ResolversTypes['uuid']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type Task_Min_FieldsResolvers<ContextType = any, ParentType extends ResolversParentTypes['task_min_fields'] = ResolversParentTypes['task_min_fields']> = {
+  created_at?: Resolver<Maybe<ResolversTypes['timestamptz']>, ParentType, ContextType>;
+  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  id?: Resolver<Maybe<ResolversTypes['uuid']>, ParentType, ContextType>;
+  rating?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  title?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  updated_at?: Resolver<Maybe<ResolversTypes['timestamptz']>, ParentType, ContextType>;
+  user?: Resolver<Maybe<ResolversTypes['uuid']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type Task_Mutation_ResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['task_mutation_response'] = ResolversParentTypes['task_mutation_response']> = {
+  affected_rows?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  returning?: Resolver<Array<ResolversTypes['task']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type Task_Stddev_FieldsResolvers<ContextType = any, ParentType extends ResolversParentTypes['task_stddev_fields'] = ResolversParentTypes['task_stddev_fields']> = {
+  rating?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type Task_Stddev_Pop_FieldsResolvers<ContextType = any, ParentType extends ResolversParentTypes['task_stddev_pop_fields'] = ResolversParentTypes['task_stddev_pop_fields']> = {
+  rating?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type Task_Stddev_Samp_FieldsResolvers<ContextType = any, ParentType extends ResolversParentTypes['task_stddev_samp_fields'] = ResolversParentTypes['task_stddev_samp_fields']> = {
+  rating?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type Task_Sum_FieldsResolvers<ContextType = any, ParentType extends ResolversParentTypes['task_sum_fields'] = ResolversParentTypes['task_sum_fields']> = {
+  rating?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type Task_Var_Pop_FieldsResolvers<ContextType = any, ParentType extends ResolversParentTypes['task_var_pop_fields'] = ResolversParentTypes['task_var_pop_fields']> = {
+  rating?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type Task_Var_Samp_FieldsResolvers<ContextType = any, ParentType extends ResolversParentTypes['task_var_samp_fields'] = ResolversParentTypes['task_var_samp_fields']> = {
+  rating?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type Task_Variance_FieldsResolvers<ContextType = any, ParentType extends ResolversParentTypes['task_variance_fields'] = ResolversParentTypes['task_variance_fields']> = {
+  rating?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export interface TimestamptzScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['timestamptz'], any> {
+  name: 'timestamptz';
+}
+
+export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['user'] = ResolversParentTypes['user']> = {
+  created_at?: Resolver<ResolversTypes['timestamptz'], ParentType, ContextType>;
+  email?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['uuid'], ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  tasks?: Resolver<Array<ResolversTypes['task']>, ParentType, ContextType, RequireFields<UserTasksArgs, never>>;
+  tasks_aggregate?: Resolver<ResolversTypes['task_aggregate'], ParentType, ContextType, RequireFields<UserTasks_AggregateArgs, never>>;
+  updated_at?: Resolver<ResolversTypes['timestamptz'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type User_AggregateResolvers<ContextType = any, ParentType extends ResolversParentTypes['user_aggregate'] = ResolversParentTypes['user_aggregate']> = {
+  aggregate?: Resolver<Maybe<ResolversTypes['user_aggregate_fields']>, ParentType, ContextType>;
+  nodes?: Resolver<Array<ResolversTypes['user']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type User_Aggregate_FieldsResolvers<ContextType = any, ParentType extends ResolversParentTypes['user_aggregate_fields'] = ResolversParentTypes['user_aggregate_fields']> = {
+  count?: Resolver<ResolversTypes['Int'], ParentType, ContextType, RequireFields<User_Aggregate_FieldsCountArgs, never>>;
+  max?: Resolver<Maybe<ResolversTypes['user_max_fields']>, ParentType, ContextType>;
+  min?: Resolver<Maybe<ResolversTypes['user_min_fields']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type User_Max_FieldsResolvers<ContextType = any, ParentType extends ResolversParentTypes['user_max_fields'] = ResolversParentTypes['user_max_fields']> = {
+  created_at?: Resolver<Maybe<ResolversTypes['timestamptz']>, ParentType, ContextType>;
+  email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  id?: Resolver<Maybe<ResolversTypes['uuid']>, ParentType, ContextType>;
+  name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  updated_at?: Resolver<Maybe<ResolversTypes['timestamptz']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type User_Min_FieldsResolvers<ContextType = any, ParentType extends ResolversParentTypes['user_min_fields'] = ResolversParentTypes['user_min_fields']> = {
+  created_at?: Resolver<Maybe<ResolversTypes['timestamptz']>, ParentType, ContextType>;
+  email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  id?: Resolver<Maybe<ResolversTypes['uuid']>, ParentType, ContextType>;
+  name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  updated_at?: Resolver<Maybe<ResolversTypes['timestamptz']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type User_Mutation_ResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['user_mutation_response'] = ResolversParentTypes['user_mutation_response']> = {
+  affected_rows?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  returning?: Resolver<Array<ResolversTypes['user']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export interface UuidScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['uuid'], any> {
+  name: 'uuid';
+}
+
+export type Resolvers<ContextType = any> = {
+  mutation_root?: Mutation_RootResolvers<ContextType>;
+  query_root?: Query_RootResolvers<ContextType>;
+  subscription_root?: Subscription_RootResolvers<ContextType>;
+  task?: TaskResolvers<ContextType>;
+  task_aggregate?: Task_AggregateResolvers<ContextType>;
+  task_aggregate_fields?: Task_Aggregate_FieldsResolvers<ContextType>;
+  task_avg_fields?: Task_Avg_FieldsResolvers<ContextType>;
+  task_max_fields?: Task_Max_FieldsResolvers<ContextType>;
+  task_min_fields?: Task_Min_FieldsResolvers<ContextType>;
+  task_mutation_response?: Task_Mutation_ResponseResolvers<ContextType>;
+  task_stddev_fields?: Task_Stddev_FieldsResolvers<ContextType>;
+  task_stddev_pop_fields?: Task_Stddev_Pop_FieldsResolvers<ContextType>;
+  task_stddev_samp_fields?: Task_Stddev_Samp_FieldsResolvers<ContextType>;
+  task_sum_fields?: Task_Sum_FieldsResolvers<ContextType>;
+  task_var_pop_fields?: Task_Var_Pop_FieldsResolvers<ContextType>;
+  task_var_samp_fields?: Task_Var_Samp_FieldsResolvers<ContextType>;
+  task_variance_fields?: Task_Variance_FieldsResolvers<ContextType>;
+  timestamptz?: GraphQLScalarType;
+  user?: UserResolvers<ContextType>;
+  user_aggregate?: User_AggregateResolvers<ContextType>;
+  user_aggregate_fields?: User_Aggregate_FieldsResolvers<ContextType>;
+  user_max_fields?: User_Max_FieldsResolvers<ContextType>;
+  user_min_fields?: User_Min_FieldsResolvers<ContextType>;
+  user_mutation_response?: User_Mutation_ResponseResolvers<ContextType>;
+  uuid?: GraphQLScalarType;
+};
+
+export type DirectiveResolvers<ContextType = any> = {
+  cached?: CachedDirectiveResolver<any, any, ContextType>;
+};
 
 export const UserDetailsFragment = `
     fragment userDetailsFragment on user {
