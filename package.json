@@ -1,6 +1,7 @@
 {
-  "name": "chorechamps",
+  "name": "react-native-hasura-template",
   "version": "1.0.0",
+  "author": "Chuck Jewell",
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
     "start": "expo start",
