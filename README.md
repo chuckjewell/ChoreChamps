@@ -1,10 +1,11 @@
-# ChoreChamps
+# react-native-hasura-template
 
 Default react-native expo typescript tabbed template, slightly reorganized and hooked into hasura with supporting libs.
 
 - Hasura in docker
+- postgres example db seed/migrations
 - graphql-request
-- graphql-codegen (auto-generate types, hooks and resolvers based on the hasura project) 
+- graphql-codegen (auto-generate types, hooks and resolvers based on the hasura project)
 
 
 **Start the docker image:** yarn hasura:up
